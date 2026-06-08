@@ -8,10 +8,20 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('notifikasis', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+
+            $table->id();
+
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
             $table->string('judul');
+
             $table->text('pesan');
-            $table->boolean('is_read')->default(false);
+
+            $table->boolean('is_read')
+                ->default(false);
+
             $table->timestamps();
         });
     }

@@ -22,10 +22,10 @@ return new class extends Migration
             $table->text('bukti_kepemilikan');
 
             $table->enum('status', [
-                'pending',
-                'approved',
-                'rejected'
-            ])->default('pending');
+                'menunggu',
+                'disetujui',
+                'ditolak'
+            ])->default('menunggu');
 
             $table->timestamps();
         });

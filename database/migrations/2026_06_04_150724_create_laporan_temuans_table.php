@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
         Schema::create('laporan_temuans', function (Blueprint $table) {
@@ -31,9 +30,9 @@ return new class extends Migration
             $table->string('gambar')->nullable();
 
             $table->enum('status', [
-                'pending',
-                'claimed'
-            ])->default('pending');
+                'ditemukan',
+                'diklaim'
+            ])->default('ditemukan');
 
             $table->timestamps();
         });

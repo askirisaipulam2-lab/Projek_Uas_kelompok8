@@ -17,7 +17,10 @@ class LokasiResource extends Resource
 {
     protected static ?string $model = Lokasi::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-map-pin';
+    protected static ?string $navigationLabel = 'lokasi';
+
+    protected static ?string $navigationGroup = 'Master Data';
 
     public static function form(Form $form): Form
     {
@@ -57,6 +60,16 @@ class LokasiResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->role === 'admin';
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->role === 'admin';
     }
 
     public static function getRelations(): array

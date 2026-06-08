@@ -17,7 +17,10 @@ class KatagoriResource extends Resource
 {
     protected static ?string $model = Kategori::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-folder';
+    protected static ?string $navigationLabel = 'kategori';
+
+    protected static ?string $navigationGroup = 'Master Data';
 
     public static function form(Form $form): Form
     {
@@ -45,6 +48,16 @@ class KatagoriResource extends Resource
                     ->dateTime(),
 
             ]);
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->role === 'admin';
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->role === 'admin';
     }
 
     public static function getRelations(): array

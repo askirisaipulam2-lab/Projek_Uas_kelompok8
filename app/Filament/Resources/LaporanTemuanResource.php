@@ -17,21 +17,34 @@ class LaporanTemuanResource extends Resource
 {
     protected static ?string $model = LaporanTemuan::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-magnifying-glass';
+    protected static ?string $navigationLabel = 'laporan temuan';
+
+    protected static ?string $navigationGroup = 'Transaksi';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('user_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('kategori_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('lokasi_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Select::make('user_id')
+                    ->label('Pelapor')
+                    ->relationship('user', 'name')
+                    ->default(auth()->id())
+                    ->disabled()
+                    ->dehydrated()
+                    ->required(),
+                Forms\Components\Select::make('kategori_id')
+                    ->label('Kategori')
+                    ->relationship('kategori', 'nama')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
+                Forms\Components\Select::make('lokasi_id')
+                    ->label('Lokasi')
+                    ->relationship('lokasi', 'nama')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
                 Forms\Components\TextInput::make('judul')
                     ->required()
                     ->maxLength(255),
@@ -40,7 +53,12 @@ class LaporanTemuanResource extends Resource
                     ->columnSpanFull(),
                 Forms\Components\DatePicker::make('tanggal_temuan')
                     ->required(),
-                Forms\Components\TextInput::make('status')
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'ditemukan' => 'Ditemukan',
+                        'diklaim' => 'Diklaim',
+                    ])
+                    ->default('ditemukan')
                     ->required(),
                 Forms\Components\FileUpload::make('gambar')
                     ->image()
@@ -100,6 +118,20 @@ class LaporanTemuanResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function canEdit($record): bool
+    {
+        if (auth()->user()->role === 'admin') {
+            return true;
+        }
+
+        return $record->user_id === auth()->id();
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery();
     }
 
     public static function getPages(): array

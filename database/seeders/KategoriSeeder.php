@@ -2,40 +2,30 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Kategori;
+use Illuminate\Database\Seeder;
 
 class KategoriSeeder extends Seeder
 {
     public function run(): void
     {
         $data = [
-            ['nama' => 'Laptop'],
-            ['nama' => 'Handphone'],
-            ['nama' => 'Tas'],
-            ['nama' => 'Dompet'],
-            ['nama' => 'Kunci'],
-            ['nama' => 'Jam Tangan'],
-            ['nama' => 'Helm'],
-            ['nama' => 'Power Bank'],
-            ['nama' => 'Flashdisk'],
-            ['nama' => 'Mouse'],
-            ['nama' => 'Keyboard'],
-            ['nama' => 'Buku'],
-            ['nama' => 'Kacamata'],
-            ['nama' => 'Jaket'],
-            ['nama' => 'Sepatu'],
-            ['nama' => 'Kartu Mahasiswa'],
-            ['nama' => 'Charger'],
-            ['nama' => 'Headset'],
-            ['nama' => 'Tablet'],
-            ['nama' => 'Dokumen'],
+            'Elektronik',
+            'Dokumen',
+            'Tas',
+            'Dompet',
+            'Pakaian',
+            'Sepatu',
+            'Aksesoris',
+            'Kunci',
+            'Kendaraan',
+            'Lainnya',
         ];
 
-        foreach ($data as $item) {
+        foreach ($data as $kategori) {
             Kategori::create([
-                'nama' => $item['nama'],
-                'deskripsi' => 'Kategori ' . $item['nama'],
+                'nama' => $kategori,
+                'deskripsi' => fake()->sentence(),
             ]);
         }
     }

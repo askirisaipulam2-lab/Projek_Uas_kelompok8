@@ -17,7 +17,10 @@ class TagResource extends Resource
 {
     protected static ?string $model = Tag::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-ticket';
+    protected static ?string $navigationLabel = 'tag';
+
+    protected static ?string $navigationGroup = 'Master Data';
 
     public static function form(Form $form): Form
     {
@@ -55,6 +58,16 @@ class TagResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->role === 'admin';
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->role === 'admin';
     }
 
     public static function getRelations(): array

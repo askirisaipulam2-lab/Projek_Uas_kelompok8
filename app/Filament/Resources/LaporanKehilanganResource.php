@@ -17,7 +17,10 @@ class LaporanKehilanganResource extends Resource
 {
     protected static ?string $model = LaporanKehilangan::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-exclamation-circle';
+    protected static ?string $navigationLabel = 'laporan kehilangan';
+
+    protected static ?string $navigationGroup = 'Transaksi';
 
     public static function form(Form $form): Form
     {
@@ -36,6 +39,12 @@ class LaporanKehilanganResource extends Resource
                     ->searchable()
                     ->preload()
                     ->required(),
+                Forms\Components\Select::make('tags')
+                    ->label('Tags')
+                    ->relationship('tags', 'nama')
+                    ->multiple()
+                    ->searchable()
+                    ->preload(),
                 Forms\Components\Select::make('lokasi_id')
                     ->label('Lokasi')
                     ->relationship('lokasi', 'nama')
@@ -83,6 +92,10 @@ class LaporanKehilanganResource extends Resource
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('tags.nama')
+                    ->badge()
+                    ->separator(',')
+                    ->label('Tags'),
                 Tables\Columns\ImageColumn::make('gambar')
                     ->disk('public')
                     ->defaultImageUrl('https://placehold.co/100x100')
@@ -115,6 +128,17 @@ class LaporanKehilanganResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if (auth()->user()->role === 'mahasiswa') {
+            return $query->where('user_id', auth()->id());
+        }
+
+        return $query;
     }
 
     public static function getPages(): array

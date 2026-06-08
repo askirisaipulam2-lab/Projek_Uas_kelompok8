@@ -2,34 +2,34 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Tag;
+use Illuminate\Database\Seeder;
 
 class TagSeeder extends Seeder
 {
     public function run(): void
     {
         $tags = [
-            'Elektronik',
-            'Berharga',
-            'Dokumen',
-            'Aksesoris',
-            'Pribadi',
-            'Penting',
-            'Kampus',
-            'Mahasiswa',
-            'Dosen',
-            'Karyawan',
+            'Laptop',
+            'Asus',
+            'Acer',
             'Hitam',
             'Putih',
-            'Merah',
-            'Biru',
-            'Kecil',
-            'Besar',
-            'Baru',
-            'Bekas',
-            'Mahal',
-            'Murah',
+            'Dompet',
+            'Tas',
+            'Honda',
+            'Yamaha',
+            'Mahasiswa',
+            'Elektronik',
+            'Kunci',
+            'Sepatu',
+            'Jaket',
+            'Kacamata',
+            'Smartphone',
+            'Samsung',
+            'iPhone',
+            'Dokumen',
+            'KTM',
         ];
 
         foreach ($tags as $tag) {
