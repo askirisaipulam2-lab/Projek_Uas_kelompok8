@@ -13,6 +13,7 @@ class Klaim extends Model
         'laporan_temuan_id',
         'user_id',
         'bukti_kepemilikan',
+        'foto_bukti', // 👈 WAJIB TAMBAHKAN BARIS INI
         'status',
     ];
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Widgets;
+namespace App\Filament\Widgets; // 🔍 SUDAH DIPERBAIKI: Namespace disesuaikan dengan standar Filament v3
 
 use App\Models\Klaim;
 use App\Models\LaporanKehilangan;
@@ -10,36 +10,62 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class StatistikOverview extends StatsOverviewWidget
 {
-    // Opsional: Mengatur agar statistik diperbarui otomatis setiap 10 detik tanpa refresh halaman
-    protected static ?string $pollingInterval = '10s';
+    // Mengatur agar statistik diperbarui otomatis setiap 15 detik tanpa refresh halaman
+    protected static ?string $pollingInterval = '15s';
 
     protected function getStats(): array
     {
-        // Hitung total laporan hari ini dari gabungan Kehilangan dan Temuan
+        // 1. Hitung data hari ini
         $hariIniKehilangan = LaporanKehilangan::whereDate('created_at', today())->count();
         $hariIniTemuan = LaporanTemuan::whereDate('created_at', today())->count();
         $totalHariIni = $hariIniKehilangan + $hariIniTemuan;
 
+        // 2. Ambil data historis 7 hari terakhir untuk grafik mini (Sparkline)
+        $trenKehilangan = [];
+        $trenTemuan = [];
+        $trenKlaim = [];
+
+        for ($i = 6; $i >= 0; $i--) {
+            $tanggal = now()->subDays($i)->toDateString();
+            $trenKehilangan[] = LaporanKehilangan::whereDate('created_at', $tanggal)->count();
+            $trenTemuan[] = LaporanTemuan::whereDate('created_at', $tanggal)->count();
+            $trenKlaim[] = Klaim::whereDate('created_at', $tanggal)->count();
+        }
+
+        // 3. Logika indikator naik/turun laporan kehilangan
+        $kemarinKehilangan = LaporanKehilangan::whereDate('created_at', now()->subDay())->count();
+        $selisihKehilangan = $hariIniKehilangan - $kemarinKehilangan;
+        $descKehilangan = $selisihKehilangan >= 0 
+            ? "+" . $selisihKehilangan . " dari kemarin" 
+            : $selisihKehilangan . " dari kemarin";
+
         return [
-            Stat::make('Laporan Kehilangan', LaporanKehilangan::count())
-                ->description('Total barang hilang yang dilaporkan')
-                ->descriptionIcon('heroicon-m-arrow-trending-down')
-                ->color('danger'), // Berwarna MERAH karena indikasi kehilangan barang
+            // KOTAK 1: LAPORAN KEHILANGAN
+            Stat::make('Laporan Kehilangan', LaporanKehilangan::count() . ' Barang')
+                ->description($descKehilangan)
+                ->descriptionIcon($selisihKehilangan >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
+                ->chart($trenKehilangan) // Menampilkan grafik garis mini di bawah angka
+                ->color($selisihKehilangan > 0 ? 'danger' : 'gray'),
 
-            Stat::make('Laporan Temuan', LaporanTemuan::count())
-                ->description('Total barang yang berhasil ditemukan')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->color('success'), // Berwarna HIJAU karena indikasi barang aman/ditemukan
+            // KOTAK 2: LAPORAN TEMUAN
+            Stat::make('Laporan Temuan', LaporanTemuan::count() . ' Barang')
+                ->description('Barang berhasil diamankan')
+                ->descriptionIcon('heroicon-m-check-badge')
+                ->chart($trenTemuan)
+                ->color('success'),
 
-            Stat::make('Klaim Barang', Klaim::count())
-                ->description('Permintaan pencocokan pemilik')
+            // KOTAK 3: KLAIM BARANG
+            Stat::make('Klaim Barang', Klaim::count() . ' Pengajuan')
+                ->description('Butuh proses verifikasi')
                 ->descriptionIcon('heroicon-m-document-magnifying-glass')
-                ->color('warning'), // Berwarna KUNING/ORANYE karena butuh verifikasi/proses
+                ->chart($trenKlaim)
+                ->color('warning'),
 
-            Stat::make('Laporan Baru Hari Ini', $totalHariIni)
-                ->description("Kehilangan: {$hariIniKehilangan} | Temuan: {$hariIniTemuan}")
+            // KOTAK 4: AKTIVITAS HARI INI
+            Stat::make('Laporan Baru Hari Ini', $totalHariIni . ' Laporan')
+                ->description("Kehilangan: {$hariIniKehilangan} • Temuan: {$hariIniTemuan}")
                 ->descriptionIcon('heroicon-m-clock')
-                ->color('info'), // Berwarna BIRU untuk informasi umum/terkini
+                ->color('info'),
         ];
     }
 }

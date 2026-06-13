@@ -21,6 +21,9 @@ return new class extends Migration
 
             $table->text('bukti_kepemilikan');
 
+            // 👈 TAMBAHAN: Kolom foto bertipe string dan boleh kosong (nullable)
+            $table->string('foto')->nullable(); 
+
             $table->enum('status', [
                 'menunggu',
                 'disetujui',

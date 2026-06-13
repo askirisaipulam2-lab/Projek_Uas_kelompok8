@@ -3,21 +3,20 @@
 namespace App\Providers\Filament;
 
 use Filament\Http\Middleware\Authenticate;
-use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
+use Filament\Support\Colors\Color; // <-- 1. PASTIKAN LINE INI SUDAH DI-IMPORT
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -28,10 +27,20 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            // ->viteTheme('resources/css/filament/admin/theme.css')
+            // Menambahkan Logo khusus untuk Mode Gelap (opsional)
+            ->brandLogo(asset('images/NF.png'))
+
+            // Mengatur tinggi logo agar proporsional
+            ->brandLogoHeight('3rem')
+            // --- BAGIAN WARNA ---
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => Color::Emerald, // Mengubah warna tombol dan fokus menjadi hijau
+                'gray' => Color::Slate,     // Mengubah nuansa warna teks/background abu-abu
             ])
+            // --- 🚀 PASANG DATABASE NOTIFICATIONS DI SINI ---
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('30s') // (Opsional) Cek notifikasi baru otomatis ke server setiap 30 detik
+            // ------------------------------------------------
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -56,5 +65,6 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ]);
+
     }
 }

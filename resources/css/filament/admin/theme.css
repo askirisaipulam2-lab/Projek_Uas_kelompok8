@@ -5,3 +5,84 @@
 @import '../../../../vendor/filament/filament/resources/css/base.css';
 
 @config 'tailwind.config.js';
+
+@layer components {
+    .fi-body {
+        background: #f4f7fb;
+    }
+
+    .fi-sidebar {
+        box-shadow: 16px 0 40px rgba(15, 23, 42, 0.06);
+    }
+
+    .fi-topbar > nav {
+        background: linear-gradient(135deg, #2f7ced 0%, #1454b8 100%);
+        color: #ffffff;
+        box-shadow: 0 16px 36px rgba(30, 94, 188, 0.22);
+    }
+
+    .fi-topbar svg,
+    .fi-topbar .fi-icon-btn-icon {
+        color: #ffffff;
+    }
+
+    .si-dashboard-page .fi-header {
+        display: none;
+    }
+
+    .si-dashboard-hero {
+        margin: -1.5rem -1.5rem -5.5rem;
+        min-height: 14rem;
+        padding: 3.5rem 2rem 7rem;
+        border-radius: 0 0 8px 8px;
+        background: linear-gradient(135deg, #2f7ced 0%, #194fbd 52%, #123f92 100%);
+        color: #ffffff;
+        box-shadow: 0 22px 55px rgba(15, 70, 160, 0.25);
+    }
+
+    .si-dashboard-hero h2 {
+        margin-top: 0.35rem;
+        font-size: 2rem;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .si-dashboard-hero p {
+        max-width: 42rem;
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 0.98rem;
+    }
+
+    .si-dashboard-eyebrow {
+        color: rgba(255, 255, 255, 0.86) !important;
+        font-size: 0.78rem !important;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .si-dashboard-widgets {
+        position: relative;
+        z-index: 1;
+    }
+
+    .fi-wi-stats-overview-stat,
+    .fi-section {
+        border-radius: 8px;
+        border: 0;
+        background: #ffffff;
+        box-shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
+    }
+
+    .fi-wi-stats-overview-stat .fi-wi-stats-overview-stat-value {
+        color: #273154;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .fi-wi-stats-overview-stat .fi-wi-stats-overview-stat-label,
+    .fi-section .fi-section-header-heading {
+        color: #273154;
+        font-weight: 700;
+    }
+}
