@@ -1,11 +1,13 @@
 <div
     class="bg-[#F8F9FA] min-h-screen font-sans text-slate-900 antialiased selection:bg-emerald-100 selection:text-emerald-900">
 
+    <!-- Navbar -->
     <nav
         class="bg-[#F8F9FA]/70 backdrop-blur-xl sticky top-0 z-50 border-b border-gray-200/50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
 
+                <!-- Logo -->
                 <div class="flex items-center gap-3 cursor-pointer group" wire:click="setCategory(null)">
                     <div
                         class="p-1.5 bg-white rounded-xl shadow-sm border border-gray-100 group-hover:scale-105 transition-transform duration-300">
@@ -19,23 +21,26 @@
                     </div>
                 </div>
 
-                <div
-                    class="hidden md:flex items-center space-x-1.5 bg-gray-200/50 p-1.5 rounded-full border border-gray-200/30">
-                    <button wire:click="setCategory(null)"
-                        class="text-xs font-semibold px-4 py-2 rounded-full transition-all duration-300 {{ is_null($activeCategory) ? 'bg-[#1A3A32] text-white shadow-sm' : 'text-slate-600 hover:text-[#1A3A32] hover:bg-white/50' }}">
-                        Semua Informasi
-                    </button>
-                    @foreach($categories as $cat)
-                        <button wire:click="setCategory({{ $cat->id }})"
-                            class="text-xs font-semibold px-4 py-2 rounded-full transition-all duration-300 {{ $activeCategory == $cat->id ? 'bg-[#1A3A32] text-white shadow-sm' : 'text-slate-600 hover:text-[#1A3A32] hover:bg-white/50' }}">
-                            {{ $cat->name }}
+                <!-- Right Side: Menu + Login -->
+                <div class="flex items-center gap-6">
+                    <!-- Navigasi Kategori (Dipindahkan ke samping Login) -->
+                    <div
+                        class="hidden md:flex items-center space-x-1.5 bg-gray-200/50 p-1 rounded-full border border-gray-200/30">
+                        <button wire:click="setCategory(null)"
+                            class="text-xs font-semibold px-4 py-2 rounded-full transition-all duration-300 {{ is_null($activeCategory) ? 'bg-[#1A3A32] text-white shadow-sm' : 'text-slate-600 hover:text-[#1A3A32] hover:bg-white/50' }}">
+                            Semua Informasi
                         </button>
-                    @endforeach
-                </div>
+                        @foreach($categories as $cat)
+                            <button wire:click="setCategory({{ $cat->id }})"
+                                class="text-xs font-semibold px-4 py-2 rounded-full transition-all duration-300 {{ $activeCategory == $cat->id ? 'bg-[#1A3A32] text-white shadow-sm' : 'text-slate-600 hover:text-[#1A3A32] hover:bg-white/50' }}">
+                                {{ $cat->name }}
+                            </button>
+                        @endforeach
+                    </div>
 
-                <div>
+                    <!-- Login Button -->
                     <a href="{{ url('/admin/login') }}"
-                        class="inline-flex items-center justify-center px-5 py-2.5 text-xs font-bold text-white bg-[#1A3A32] hover:bg-[#112621] rounded-full shadow-md shadow-emerald-950/10 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
+                        class="inline-flex items-center justify-center px-5 py-2.5 text-xs font-bold text-white bg-[#1A3A32] hover:bg-[#112621] rounded-full shadow-md shadow-emerald-950/10 hover:shadow-lg transition-all duration-300">
                         Login
                     </a>
                 </div>
@@ -43,16 +48,17 @@
         </div>
     </nav>
 
+    <!-- Header Hero -->
     <header class="max-w-5xl mx-auto px-6 text-center pt-20 pb-16 relative overflow-hidden">
-        <div
-            class="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-b from-emerald-500/5 to-transparent blur-3xl pointer-events-none rounded-full">
+        <!-- Shadow Hijau di belakang Badge -->
+        <div class="relative inline-block mb-6">
+            <div class="absolute inset-0 bg-emerald-500 blur-2xl opacity-80 scale-150"></div>
+            <span
+                class="relative inline-flex items-center gap-1.5 px-3 py-1.5 bg-white text-emerald-700 text-xs font-bold tracking-wide uppercase rounded-full border border-emerald-200 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                Sistem Proteksi Logistik Kampus
+            </span>
         </div>
-
-        <span
-            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 text-xs font-bold tracking-wide uppercase rounded-full border border-emerald-200/40 mb-6 animate-pulse">
-            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-            Sistem Proteksi Logistik Kampus
-        </span>
 
         <h1 class="text-4xl sm:text-6xl font-extrabold text-[#1A3A32] tracking-tight max-w-4xl mx-auto leading-[1.12]">
             The Future of Security with <br>
@@ -66,16 +72,15 @@
             akademik STT-NF yang transparan, jujur, dan kondusif.
         </p>
 
-        <div class="mt-10 max-w-xl mx-auto relative group">
-            <input wire:model.live.debounce.300ms="search" type="text"
-                placeholder="Cari laporan kehilangan, barang temuan, atau edukasi..."
-                class="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-[#1A3A32]/5 focus:border-[#1A3A32] shadow-sm group-hover:shadow-md transition-all duration-300 text-sm">
-            <div class="absolute left-4 top-4 text-slate-400 group-focus-within:text-[#1A3A32] transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <!-- Search Input -->
+        <div class="mt-10 max-w-xl mx-auto relative">
+            <input wire:model.live.debounce.500ms="search" type="text" placeholder="Cari laporan atau barang temuan..."
+                class="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#1A3A32]">
+            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
-            </div>
         </div>
     </header>
 
@@ -87,7 +92,7 @@
                 <div
                     class="absolute inset-0 bg-gradient-to-t from-[#1A3A32]/60 to-transparent z-10 opacity-60 group-hover:opacity-40 transition-opacity duration-300">
                 </div>
-                <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=600&auto=format&fit=crop"
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5hd0eNcbCjThfiUEYfIM7C8F1qPgraGkK9Yo0tP_qW8Y1sAIHi_ilqAM&s=10"
                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     alt="Campus Security">
                 <div class="absolute bottom-5 left-5 z-20 text-white">
@@ -143,7 +148,7 @@
                 <div>
                     <div class="text-2xl font-black text-slate-800 tracking-tight">24 / 7 Monitoring</div>
                     <p class="text-xs text-slate-400 mt-1 leading-relaxed">Pengawasan kotak aduan kehilangan dan
-                        inventarisasi temuan divalidasi berkala oleh tim Sarpras.</p>
+                        inventarisasi temuan divalidasi berkala oleh tim Siberang NF.</p>
                 </div>
             </div>
 
@@ -265,8 +270,13 @@
                         silakan kunjungi kantor sekretariat / Security STT Terpadu Nurul Fikri.
                     </p>
                     <div class="pt-2 text-xs text-slate-400 space-y-1.5">
-                        <p class="flex items-center gap-2"><strong class="text-slate-700">Alamat:</strong> Jl. Lenteng
-                            Agung Timur No.20, Jagakarsa, Jakarta Selatan.</p>
+                        <p class="flex items-center gap-2"><strong class="text-slate-700">Alamat:</strong>
+                        <ul class="list-disc list-inside">
+                            <li>Jl. Situ Indah No. 116, Kelurahan Tugu, Kecamatan Cimanggis, Kota Depok, Jawa Barat</li>
+                            <li>Jl. Raya Lenteng Agung No.20-21, RT.4/RW.1, Srengseng Sawah, Kecamatan Jagakarsa,
+                                Jakarta Selatan</li>
+                        </ul>
+                        </p>
                         <p class="flex items-center gap-2"><strong class="text-slate-700">Waktu Operasional:</strong>
                             Senin - Sabtu (08:00 - 17:00 WIB)</p>
                     </div>
@@ -311,7 +321,7 @@
                 </div>
             </div>
             <div class="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-slate-500">
-                <p>© 2026 Proyek Akhir Sistem Informasi Lingkungan STT-NF. Hak Cipta Dilindungi.</p>
+                <p>© 2026 Project pembuatan sistem informasi kelompok 8</p>
                 <p class="font-mono tracking-wider text-slate-600">v2.1.0-STABLE</p>
             </div>
 

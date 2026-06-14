@@ -11,11 +11,10 @@ class LandingPage extends Component
 {
     use WithPagination;
 
-    // State untuk menyimpan pencarian dan filter kategori aktif
     public $search = '';
     public $activeCategory = null;
 
-    // Reset halaman ke nomor 1 jika user mengubah filter/pencarian
+    // Reset ke halaman 1 saat user mengetik atau ganti kategori
     public function updating($property)
     {
         if (in_array($property, ['search', 'activeCategory'])) {
@@ -23,7 +22,6 @@ class LandingPage extends Component
         }
     }
 
-    // Fungsi untuk mengubah kategori ketika di-klik di menu/navbar
     public function setCategory($categoryId = null)
     {
         $this->activeCategory = $categoryId;
@@ -32,12 +30,25 @@ class LandingPage extends Component
     public function render()
     {
         $categories = Category::all();
-        $posts = Post::query()->where('is_published', true)->latest()->paginate(6);
+
+        // Query dinamis berdasarkan search dan activeCategory
+        $posts = Post::query()
+            ->where('is_published', true)
+            ->when($this->activeCategory, function($query) {
+                $query->where('category_id', $this->activeCategory);
+            })
+            ->when($this->search, function($query) {
+                $query->where(function($q) {
+                    $q->where('title', 'like', '%' . $this->search . '%')
+                      ->orWhere('content', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->latest()
+            ->paginate(6);
 
         return view('livewire.landing-page', [
             'posts' => $posts,
             'categories' => $categories
-        ])->layout('layouts.app'); // 🔍 Beritahu Livewire untuk pakai folder layouts biasa, bukan components.layouts
+        ])->layout('layouts.app');
     }
-
 }
