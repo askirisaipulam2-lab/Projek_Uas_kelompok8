@@ -1,3 +1,14 @@
 {
-  "outputDirectory": "public/build"
+  "version": 2,
+  "outputDirectory": "public/build",
+  "routes": [
+    {
+      "src": "/build/(.*)",
+      "dest": "/public/build/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/index.php"
+    }
+  ]
 }
