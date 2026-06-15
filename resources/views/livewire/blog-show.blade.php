@@ -1,4 +1,4 @@
-<div class="bg-slate-50 min-h-screen py-12 font-sans text-slate-800 selection:bg-emerald-100 selection:text-emerald-900">
+<div class="bg-green-100 min-h-screen py-12 font-sans text-slate-800 selection:bg-emerald-100 selection:text-emerald-900">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
         
         <div class="mb-10">

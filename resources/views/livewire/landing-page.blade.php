@@ -81,29 +81,49 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
-        </div>
+            </div>
     </header>
 
     <section class="max-w-7xl mx-auto px-6 lg:px-8 py-4">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[220px]">
 
+            <!-- Card 1 -->
             <div
-                class="md:col-span-4 rounded-3xl bg-slate-200 overflow-hidden relative shadow-sm group border border-gray-100">
+                class="md:col-span-4 rounded-3xl bg-slate-200 overflow-hidden relative shadow-[0_10px_40px_-10px_rgba(0,0,0,0.3)] group border border-gray-100 transition-all duration-300 hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.4)] cursor-pointer">
+
+                <!-- Layer Gelap (Background Gradient) -->
                 <div
-                    class="absolute inset-0 bg-gradient-to-t from-[#1A3A32]/60 to-transparent z-10 opacity-60 group-hover:opacity-40 transition-opacity duration-300">
+                    class="absolute inset-0 bg-gradient-to-t from-[#1A3A32]/80 to-transparent z-10 transition-opacity duration-300">
                 </div>
+
+                <!-- Gambar -->
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5hd0eNcbCjThfiUEYfIM7C8F1qPgraGkK9Yo0tP_qW8Y1sAIHi_ilqAM&s=10"
                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     alt="Campus Security">
+
+                <!-- Konten Statis (Selalu Terlihat) -->
                 <div class="absolute bottom-5 left-5 z-20 text-white">
                     <span
-                        class="text-[10px] font-bold uppercase tracking-wider bg-white/20 backdrop-blur-md px-2 py-1 rounded-md">Sarpras
-                        Terpadu</span>
+                        class="text-[10px] font-bold uppercase tracking-wider bg-white/20 backdrop-blur-md px-2 py-1 rounded-md">
+                        Sarpras Terpadu
+                    </span>
+                </div>
+
+                <!-- Teks Tersembunyi (Muncul saat Hover) -->
+                <div
+                    class="absolute inset-0 z-30 flex items-center justify-center p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[#1A3A32]/40 backdrop-blur-sm">
+                    <div class="text-center text-white space-y-2">
+                        <p class="font-bold text-lg leading-tight">Temukan Barang?</p>
+                        <p class="text-xs text-emerald-100 font-medium leading-relaxed">
+                            Harap segera kembalikan ke pemiliknya atau laporkan penemuan Anda ke pos keamanan STT Terpadu Nurul Fikri.
+                        </p>
+                    </div>
                 </div>
             </div>
 
+            <!-- Card 2 -->
             <div
-                class="md:col-span-4 rounded-3xl bg-gradient-to-br from-[#1A3A32] to-[#112621] p-7 text-white flex flex-col justify-between shadow-md relative overflow-hidden group border border-emerald-950/20 transform hover:-translate-y-1 transition-all duration-300">
+                class="md:col-span-4 rounded-3xl bg-gradient-to-br from-[#1A3A32] to-[#112621] p-7 text-white flex flex-col justify-between relative overflow-hidden group border border-emerald-950/20 shadow-[0_10px_40px_-10px_rgba(26,58,50,0.5)] transform hover:-translate-y-1 transition-all duration-300 hover:shadow-[0_20px_50px_-15px_rgba(26,58,50,0.7)]">
                 <div class="absolute -right-6 -bottom-6 text-white/[0.03] transform -rotate-12 pointer-events-none">
                     <svg class="w-44 h-44" fill="currentColor" viewBox="0 0 24 24">
                         <path
@@ -129,11 +149,12 @@
                 </div>
             </div>
 
+            <!-- Card 3 -->
             <div
-                class="md:col-span-4 rounded-3xl bg-white border border-gray-200/70 p-7 flex flex-col justify-between shadow-sm transform hover:-translate-y-1 transition-all duration-300">
+                class="md:col-span-4 rounded-3xl bg-white border border-gray-200/70 p-7 flex flex-col justify-between shadow-[0_10px_30px_-5px_rgba(0,0,0,0.1)] transform hover:-translate-y-1 transition-all duration-300 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)]">
                 <div class="flex justify-between items-start">
                     <div
-                        class="w-11 h-11 rounded-xl bg-slate-50 flex items-center justify-center text-[#1A3A32] border border-gray-100 shadow-inner">
+                        class="w-11 h-11 rounded-xl bg-slate-50 flex items-center justify-center text-[#1A3A32] border border-gray-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)]">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>

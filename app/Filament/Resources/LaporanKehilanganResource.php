@@ -33,7 +33,7 @@ class LaporanKehilanganResource extends Resource
             ->schema([
                 Forms\Components\Grid::make(3)
                     ->schema([
-                        
+
                         // SISI KIRI: Formulir Informasi Kronologi (Mengambil 2 Kolom)
                         Forms\Components\Section::make('Informasi Utama Kehilangan')
                             ->description('Tuliskan detail barang yang hilang beserta lokasi terakhir kali Anda mengingatnya.')
@@ -148,9 +148,10 @@ class LaporanKehilanganResource extends Resource
                     ->label('Detail Laporan Kehilangan')
                     ->weight('bold')
                     ->searchable()
-                    ->description(fn (LaporanKehilangan $record): string => 
-                        "Kategori: " . ($record->kategori?->nama ?? '-') . 
-                        " | Lokasi: " . ($record->lokasi?->nama ?? '-') . 
+                    ->description(
+                        fn(LaporanKehilangan $record): string =>
+                        "Kategori: " . ($record->kategori?->nama ?? '-') .
+                        " | Lokasi: " . ($record->lokasi?->nama ?? '-') .
                         " (" . ($record->tanggal_hilang ? \Carbon\Carbon::parse($record->tanggal_hilang)->format('d M Y') : '-') . ")"
                     ),
 
@@ -165,13 +166,13 @@ class LaporanKehilanganResource extends Resource
                 // Kolom 4: Status Badge dengan Ikon Indikator Selaras
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->icon(fn (string $state): string => match (strtolower($state)) {
+                    ->icon(fn(string $state): string => match (strtolower($state)) {
                         'hilang' => 'heroicon-m-exclamation-triangle',
                         'ditemukan' => 'heroicon-m-arrow-path',
                         'diklaim' => 'heroicon-m-check-badge',
                         default => 'heroicon-m-question-mark-circle',
                     })
-                    ->color(fn (string $state): string => match (strtolower($state)) {
+                    ->color(fn(string $state): string => match (strtolower($state)) {
                         'hilang' => 'danger',     // Merah
                         'ditemukan' => 'warning', // Kuning/Oranye
                         'diklaim' => 'success',   // Hijau Emerald
@@ -240,11 +241,11 @@ class LaporanKehilanganResource extends Resource
                         return $query
                             ->when(
                                 $data['dari_tanggal'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('tanggal_hilang', '>=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('tanggal_hilang', '>=', $date),
                             )
                             ->when(
                                 $data['sampai_tanggal'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('tanggal_hilang', '<=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('tanggal_hilang', '<=', $date),
                             );
                     })
                     ->indicateUsing(function (array $data): array {
@@ -266,9 +267,9 @@ class LaporanKehilanganResource extends Resource
                     Tables\Actions\EditAction::make()->color('warning'),
                     Tables\Actions\DeleteAction::make()->color('danger'),
                 ])->icon('heroicon-m-ellipsis-vertical')
-                  ->tooltip('Aksi Data')
-                  ->button()
-                  ->label('Menu')
+                    ->tooltip('Aksi Data')
+                    ->button()
+                    ->label('Menu')
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -285,10 +286,10 @@ class LaporanKehilanganResource extends Resource
                     ->description('Lembar verifikasi pencarian untuk mencocokkan data kehilangan mahasiswa dengan barang temuan di lapangan.')
                     ->icon('heroicon-o-archive-box-arrow-down')
                     ->schema([
-                        
+
                         Tabs::make('Review Menu')
                             ->tabs([
-                                
+
                                 // TAB 1: Rincian Kronologi
                                 Tabs\Tab::make('Data Kronologi & Identitas')
                                     ->icon('heroicon-o-information-circle')
@@ -365,6 +366,12 @@ class LaporanKehilanganResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function canEdit($record): bool
+    {
+        // Hanya Admin yang bisa mengedit
+        return auth()->user()->role === 'admin';
     }
 
     public static function getGloballySearchableAttributes(): array

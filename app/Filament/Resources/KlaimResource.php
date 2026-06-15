@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Components\ImageEntry; 
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
@@ -34,7 +34,7 @@ class KlaimResource extends Resource
                 // Menggunakan sistem Grid 3 kolom untuk membagi Form menjadi kiri (utama) dan kanan (media)
                 Forms\Components\Grid::make(3)
                     ->schema([
-                        
+
                         // SISI KIRI: Formulir Data (Mengambil 2 Kolom)
                         Forms\Components\Section::make('Data Pengajuan Klaim')
                             ->description('Tentukan barang yang diklaim dan isi bukti penjelasan dengan jelas.')
@@ -106,10 +106,10 @@ class KlaimResource extends Resource
                 Tables\Columns\ImageColumn::make('foto_bukti')
                     ->label('Foto Bukti')
                     ->square()
-                    ->stacked() 
+                    ->stacked()
                     ->height(50)
                     ->width(50)
-                    ->extraImgAttributes(['class' => 'rounded-xl shadow-sm border border-gray-200']) 
+                    ->extraImgAttributes(['class' => 'rounded-xl shadow-sm border border-gray-200'])
                     ->defaultImageUrl(url('images/placeholder.png')),
 
                 // Kolom 2: Informasi Barang Temuan
@@ -122,7 +122,7 @@ class KlaimResource extends Resource
                 // Kolom 3: Pengklaim + Ada sub-informasi tanggal di bawah namanya
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Data Pengklaim')
-                    ->description(fn (Klaim $record): string => 'Diajukan: ' . $record->created_at->diffForHumans()) 
+                    ->description(fn(Klaim $record): string => 'Diajukan: ' . $record->created_at->diffForHumans())
                     ->searchable()
                     ->sortable(),
 
@@ -136,13 +136,13 @@ class KlaimResource extends Resource
                 // Kolom 5: Status Badge Berwarna + Ikon Indikator Dinamis
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->icon(fn (string $state): string => match ($state) {
+                    ->icon(fn(string $state): string => match ($state) {
                         'menunggu' => 'heroicon-m-clock',
                         'disetujui' => 'heroicon-m-check-circle',
                         'ditolak' => 'heroicon-m-x-circle',
                         default => 'heroicon-m-question-mark-circle',
                     })
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'menunggu' => 'warning',
                         'disetujui' => 'success',
                         'ditolak' => 'danger',
@@ -178,11 +178,11 @@ class KlaimResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
                             )
                             ->when(
                                 $data['created_until'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     })
                     ->indicateUsing(function (array $data): array {
@@ -203,9 +203,9 @@ class KlaimResource extends Resource
                     Tables\Actions\EditAction::make()->color('warning'),
                     Tables\Actions\DeleteAction::make()->color('danger'),
                 ])->icon('heroicon-m-ellipsis-vertical')
-                  ->tooltip('Aksi Data')
-                  ->button()
-                  ->label('Menu')
+                    ->tooltip('Aksi Data')
+                    ->button()
+                    ->label('Menu')
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -222,11 +222,11 @@ class KlaimResource extends Resource
                     ->description('Halaman pengecekan data kecocokan barang temuan dengan bukti yang dibawa user.')
                     ->icon('heroicon-o-shield-check')
                     ->schema([
-                        
+
                         // Menggunakan Tabs untuk memisahkan Detail Informasi Teknis vs File Foto Media
                         Tabs::make('Detail Ringkasan')
                             ->tabs([
-                                
+
                                 // Tab 1: Informasi Formulir
                                 Tabs\Tab::make('Detail Informasi')
                                     ->icon('heroicon-o-information-circle')
@@ -237,7 +237,7 @@ class KlaimResource extends Resource
                                                     ->label('Barang Temuan yang Diklaim')
                                                     ->weight('bold')
                                                     ->color('primary'),
-                                                
+
                                                 TextEntry::make('status')
                                                     ->badge()
                                                     ->color(fn(string $state): string => match ($state) {
@@ -249,7 +249,7 @@ class KlaimResource extends Resource
 
                                                 TextEntry::make('user.name')
                                                     ->label('Diajukan Oleh (Mahasiswa)'),
-                                                
+
                                                 TextEntry::make('created_at')
                                                     ->label('Waktu Cetak Masuk System')
                                                     ->dateTime('d F Y - H:i WIB'),
@@ -258,7 +258,7 @@ class KlaimResource extends Resource
                                         TextEntry::make('bukti_kepemilikan')
                                             ->label('Pernyataan Bukti Kepemilikan')
                                             ->markdown()
-                                            ->prose() 
+                                            ->prose()
                                             ->columnSpanFull(),
                                     ]),
 
@@ -268,7 +268,7 @@ class KlaimResource extends Resource
                                     ->schema([
                                         ImageEntry::make('foto_bukti')
                                             ->label('Preview Foto Fisik Barang Bukti')
-                                            ->height(280) 
+                                            ->height(280)
                                             ->extraImgAttributes(['class' => 'rounded-2xl shadow-md border border-gray-100'])
                                             ->columnSpanFull(),
                                     ]),
@@ -297,6 +297,12 @@ class KlaimResource extends Resource
     public static function getGlobalSearchResultTitle($record): string
     {
         return $record->laporanTemuan?->judul ?? 'Klaim';
+    }
+
+    public static function canEdit($record): bool
+    {
+        // Hanya Admin yang bisa mengedit
+        return auth()->user()->role === 'admin';
     }
 
     public static function getGlobalSearchResultDetails($record): array

@@ -1,0 +1,55 @@
+/* --- SIDEBAR --- */
+.fi-sidebar {
+    background-color: #064e3b !important; /* Hijau Tua */
+    transition: background-color 0.3s ease;
+}
+
+/* Sidebar jadi Hitam saat Dark Mode */
+.dark .fi-sidebar {
+    background-color: #0f172a !important;
+}
+
+/* Warna Teks Default (Putih) */
+.fi-sidebar-item-label,
+.fi-sidebar-group-label,
+.fi-sidebar-item-icon {
+    color: #ffffff !important;
+}
+
+/* Efek Aktif (Hijau Terang) */
+.fi-sidebar-item-active {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border-radius: 0.5rem;
+}
+
+.fi-sidebar-item-active .fi-sidebar-item-label,
+.fi-sidebar-item-active .fi-sidebar-item-icon {
+    color: #0b7951 !important;
+}
+
+/* --- DASHBOARD BACKGROUND --- */
+/* Hijau sangat muda untuk Mode Terang */
+body {
+    background-color: #f0fdf4 !important;
+    transition: background-color 0.3s ease;
+}
+
+/* Hitam/Gelap untuk Mode Gelap */
+.dark body {
+    background-color: #0f172a !important; /* Slate gelap yang elegan */
+}
+
+/* Pastikan area konten utama transparan agar tidak menimpa warna tabel/form */
+.fi-main {
+    background-color: transparent !important;
+}
+
+/* Memastikan teks heading tetap terlihat di kedua mode */
+.fi-header-heading {
+    color: #064e3b !important;
+}
+
+.dark .fi-header-heading {
+    color: #ffffff !important;
+}
+

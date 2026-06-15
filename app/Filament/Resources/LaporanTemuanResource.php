@@ -34,7 +34,7 @@ class LaporanTemuanResource extends Resource
             ->schema([
                 Forms\Components\Grid::make(3)
                     ->schema([
-                        
+
                         // SISI KIRI: Formulir Utama (Mengambil 2 Kolom)
                         Forms\Components\Section::make('Detail Temuan Barang')
                             ->description('Catat informasi barang hilang yang berhasil ditemukan di lingkungan kampus.')
@@ -139,9 +139,10 @@ class LaporanTemuanResource extends Resource
                     ->label('Detail Laporan Temuan')
                     ->weight('bold')
                     ->searchable()
-                    ->description(fn (LaporanTemuan $record): string => 
-                        "Kategori: " . ($record->kategori?->nama ?? '-') . 
-                        " | Lokasi: " . ($record->lokasi?->nama ?? '-') . 
+                    ->description(
+                        fn(LaporanTemuan $record): string =>
+                        "Kategori: " . ($record->kategori?->nama ?? '-') .
+                        " | Lokasi: " . ($record->lokasi?->nama ?? '-') .
                         " (" . ($record->tanggal_temuan ? \Carbon\Carbon::parse($record->tanggal_temuan)->format('d M Y') : '-') . ")"
                     ),
 
@@ -156,7 +157,7 @@ class LaporanTemuanResource extends Resource
                 // Kolom 4: Badge Status Berwarna & Berikon Selaras
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->icon(fn (string $state): string => match (strtolower($state)) {
+                    ->icon(fn(string $state): string => match (strtolower($state)) {
                         'ditemukan' => 'heroicon-m-arrow-path',
                         'diklaim' => 'heroicon-m-check-badge',
                         default => 'heroicon-m-question-mark-circle',
@@ -209,9 +210,9 @@ class LaporanTemuanResource extends Resource
                     Tables\Actions\EditAction::make()->color('warning'),
                     Tables\Actions\DeleteAction::make()->color('danger'),
                 ])->icon('heroicon-m-ellipsis-vertical')
-                  ->tooltip('Aksi Data')
-                  ->button()
-                  ->label('Menu')
+                    ->tooltip('Aksi Data')
+                    ->button()
+                    ->label('Menu')
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -228,10 +229,10 @@ class LaporanTemuanResource extends Resource
                     ->description('Detail arsip penemuan sebagai acuan pembanding ketika ada user yang mengajukan berkas klaim kepemilikan.')
                     ->icon('heroicon-o-clipboard-document-check')
                     ->schema([
-                        
+
                         Tabs::make('Arsip Menu')
                             ->tabs([
-                                
+
                                 // TAB 1: Rincian Data Teknis
                                 Tabs\Tab::make('Data Temuan & Lokasi')
                                     ->icon('heroicon-o-information-circle')
@@ -313,6 +314,8 @@ class LaporanTemuanResource extends Resource
         if (auth()->user()->role === 'admin') {
             return true;
         }
+
+        return auth()->user()->role === 'admin';
 
         return $record->user_id === auth()->id();
     }

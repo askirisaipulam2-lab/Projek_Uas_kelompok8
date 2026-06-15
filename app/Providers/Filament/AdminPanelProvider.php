@@ -17,6 +17,9 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Support\Assets\Asset;
+use Filament\Support\Assets\Css; // Gunakan Css untuk file CSS
+use Filament\Support\Assets\Js;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -36,6 +39,10 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Emerald, // Mengubah warna tombol dan fokus menjadi hijau
                 'gray' => Color::Slate,     // Mengubah nuansa warna teks/background abu-abu
+                
+            ])
+            ->assets([
+                Css::make('custom-css', asset('css/filament-custom.css')),
             ])
             // --- 🚀 PASANG DATABASE NOTIFICATIONS DI SINI ---
             ->databaseNotifications()

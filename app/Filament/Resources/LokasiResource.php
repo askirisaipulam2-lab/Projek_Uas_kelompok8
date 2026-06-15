@@ -32,7 +32,7 @@ class LokasiResource extends Resource
             ->schema([
                 Forms\Components\Section::make('Informasi Sektor & Lokasi')
                     ->description('Daftarkan titik lokasi spesifik di area kampus untuk mempermudah pemetaan penemuan atau kehilangan barang.')
-                    ->icon('heroicon-o-compass')
+                    ->icon('heroicon-o-map')
                     ->schema([
                         Forms\Components\TextInput::make('nama')
                             ->label('Nama Ruangan / Titik Lokasi')
