@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
+        if (Schema::getConnection()->getDriverName() === 'sqlite') {
+            return;
+        }
+
         Schema::table('posts', function (Blueprint $table) {
             // 1. Putuskan hubungan paksa (foreign key) lama ke tabel 'categories'
             $table->dropForeign('posts_category_id_foreign');
@@ -21,6 +25,10 @@ return new class extends Migration {
 
     public function down(): void
     {
+        if (Schema::getConnection()->getDriverName() === 'sqlite') {
+            return;
+        }
+
         Schema::table('posts', function (Blueprint $table) {
             // Mengembalikan ke aturan lama jika di-rollback
             $table->dropForeign(['category_id']);

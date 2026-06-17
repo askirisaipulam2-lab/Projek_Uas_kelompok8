@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Post;
-use App\Models\Category;
+use App\Models\PostCategory;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -29,7 +29,7 @@ class LandingPage extends Component
 
     public function render()
     {
-        $categories = Category::all();
+        $categories = PostCategory::all();
 
         // Query dinamis berdasarkan search dan activeCategory
         $posts = Post::query()

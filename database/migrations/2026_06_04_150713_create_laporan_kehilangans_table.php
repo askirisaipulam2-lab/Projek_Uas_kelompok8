@@ -32,10 +32,10 @@ return new class extends Migration {
             $table->string('gambar')->nullable();
 
             $table->enum('status', [
-                'Hilang',
-                'Ditemukan',
-                'Diklaim'
-            ])->default('Hilang');
+                'hilang',
+                'ditemukan',
+                'diklaim'
+            ])->default('hilang');
 
             $table->timestamps();
         });
