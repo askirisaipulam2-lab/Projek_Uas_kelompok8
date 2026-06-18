@@ -14,16 +14,16 @@ class CreateKlaim extends CreateRecord
 
     protected function afterCreate(): void
     {
-        $klaim = $this->record; // Mengambil relasi data klaim
-        
-        // Asumsi model Klaim memiliki relasi 'user_id' (si pengaju) dan 'temuan' (barang yang diklaim)
-        $mahasiswaPengaju = $klaim->user; 
-        $namaBarang = $klaim->temuan?->nama_barang ?? 'Barang Inventaris';
+        $klaim = $this->record;
+
+        $mahasiswaPengaju = $klaim->user;
+
+        $namaBarang = $klaim->temuan?->judul ?? 'Barang Inventaris';
 
         $judulNotif = "Pengajuan Klaim Diproses";
         $pesanNotif = "Pengajuan klaim Anda untuk barang '{$namaBarang}' telah berhasil diajukan. Mohon tunggu proses verifikasi berkas oleh Admin.";
 
-        // --- 1. KIRIM KE MAHASISWA PENGEKLAIM ---
+        // Notifikasi ke pengaju
         Notifikasi::create([
             'user_id' => $mahasiswaPengaju->id,
             'judul' => $judulNotif,
@@ -38,11 +38,13 @@ class CreateKlaim extends CreateRecord
             ->color('info')
             ->sendToDatabase($mahasiswaPengaju);
 
+        // Kirim ke admin selain pembuat klaim
+        $admins = User::where('role', 'admin')
+            ->where('id', '!=', $mahasiswaPengaju->id)
+            ->get();
 
-        // --- 2. KIRIM KE ADMIN (Agar Admin mendapat pemberitahuan ada tugas validasi baru) ---
-        $admins = User::where('role', 'admin')->get();
-        
         foreach ($admins as $admin) {
+
             $judulAdmin = "Permohonan Klaim Baru";
             $pesanAdmin = "Mahasiswa bernama {$mahasiswaPengaju->name} baru saja mengajukan klaim kepemilikan atas '{$namaBarang}'.";
 

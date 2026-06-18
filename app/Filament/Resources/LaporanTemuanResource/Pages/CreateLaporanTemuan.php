@@ -15,13 +15,21 @@ class CreateLaporanTemuan extends CreateRecord
     protected function afterCreate(): void
     {
         $temuan = $this->record;
-        $judulNotif = "Barang Ditemukan: " . $temuan->nama_barang;
-        $pesanNotif = "Kabar baik! Telah ditemukan barang '{$temuan->nama_barang}' di sekitar {$temuan->lokasi}. Silakan cek detailnya di menu Temuan Barang.";
 
+        $namaBarang = $temuan->judul;
+
+        $namaLokasi = $temuan->lokasi?->nama ?? 'Lokasi tidak diketahui';
+
+        $judulNotif = "Barang Ditemukan: {$namaBarang}";
+
+        $pesanNotif = "Kabar baik! Telah ditemukan barang '{$namaBarang}' di sekitar {$namaLokasi}. Silakan cek detailnya pada menu Laporan Temuan.";
+
+        // Kirim ke seluruh user
         $users = User::all();
 
         foreach ($users as $user) {
-            // 1. Simpan ke Tabel Log Arsip
+
+            // Simpan ke tabel notifikasis
             Notifikasi::create([
                 'user_id' => $user->id,
                 'judul' => $judulNotif,
@@ -29,7 +37,7 @@ class CreateLaporanTemuan extends CreateRecord
                 'is_read' => false,
             ]);
 
-            // 2. Kirim ke Lonceng Navbar
+            // Kirim ke lonceng navbar Filament
             NavbarNotification::make()
                 ->title($judulNotif)
                 ->body($pesanNotif)

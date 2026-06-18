@@ -14,29 +14,47 @@ class CreateLaporanKehilangan extends CreateRecord
 
     protected function afterCreate(): void
     {
-        $kehilangan = $this->record; // Mengambil data kehilangan yang baru disimpan
-        $judulNotif = "Laporan Kehilangan Baru: " . $kehilangan->nama_barang;
-        $pesanNotif = "Telah dilaporkan kehilangan barang '{$kehilangan->nama_barang}' di lokasi {$kehilangan->lokasi}. Mohon hubungi pihak admin jika melihatnya.";
+        $kehilangan = $this->record;
 
-        // Opsi A: Broadcast ke semua user (Mahasiswa & Admin)
-        $users = User::all();
+        $judulNotif = "Laporan Kehilangan Baru";
+        $pesanNotif = "Laporan kehilangan '{$kehilangan->judul}' berhasil dibuat.";
 
-        foreach ($users as $user) {
-            // 1. Simpan ke Tabel Log Arsip (Model Notifikasi Anda)
-            Notifikasi::create([
-                'user_id' => $user->id,
-                'judul' => $judulNotif,
-                'pesan' => $pesanNotif,
-                'is_read' => false,
-            ]);
+        // Notifikasi ke pembuat laporan
+        Notifikasi::create([
+            'user_id' => $kehilangan->user_id,
+            'judul' => $judulNotif,
+            'pesan' => $pesanNotif,
+            'is_read' => false,
+        ]);
 
-            // 2. Tembak langsung ke Lonceng Bel Navbar secara real-time
-            NavbarNotification::make()
-                ->title($judulNotif)
-                ->body($pesanNotif)
-                ->icon('heroicon-o-exclamation-triangle')
-                ->color('danger')
-                ->sendToDatabase($user);
+        NavbarNotification::make()
+            ->title($judulNotif)
+            ->body($pesanNotif)
+            ->icon('heroicon-o-exclamation-triangle')
+            ->color('danger')
+            ->sendToDatabase($kehilangan->user);
+
+        // Jika pembuat adalah mahasiswa, kirim juga ke admin
+        if ($kehilangan->user->role === 'mahasiswa') {
+
+            $admins = User::where('role', 'admin')->get();
+
+            foreach ($admins as $admin) {
+
+                Notifikasi::create([
+                    'user_id' => $admin->id,
+                    'judul' => 'Laporan Kehilangan Baru',
+                    'pesan' => $kehilangan->user->name . ' membuat laporan kehilangan "' . $kehilangan->judul . '".',
+                    'is_read' => false,
+                ]);
+
+                NavbarNotification::make()
+                    ->title('Laporan Kehilangan Baru')
+                    ->body($kehilangan->user->name . ' membuat laporan kehilangan "' . $kehilangan->judul . '".')
+                    ->icon('heroicon-o-exclamation-triangle')
+                    ->color('warning')
+                    ->sendToDatabase($admin);
+            }
         }
     }
 }

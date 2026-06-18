@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Tag;
-use App\Models\Notifikasi;
+use App\Models\User;
+use App\Models\Kategori;
+use App\Models\Lokasi;
 
 class LaporanKehilangan extends Model
 {
@@ -18,20 +20,6 @@ class LaporanKehilangan extends Model
         'gambar',
         'status',
     ];
-
-    protected static function booted(): void
-    {
-        static::created(function ($laporan) {
-
-            Notifikasi::create([
-                'user_id' => $laporan->user_id,
-                'judul' => 'Laporan Kehilangan',
-                'pesan' => 'Laporan kehilangan "' . $laporan->judul . '" berhasil dibuat.',
-                'is_read' => false,
-            ]);
-
-        });
-    }
 
     public function user()
     {

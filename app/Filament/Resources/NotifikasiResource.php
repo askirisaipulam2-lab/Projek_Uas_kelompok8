@@ -6,8 +6,6 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\NotifikasiResource\Pages\CreateNotifikasi;
 use App\Filament\Resources\NotifikasiResource\Pages\EditNotifikasi;
 use App\Filament\Resources\NotifikasiResource\Pages\ListNotifikasis;
-use App\Filament\Resources\NotifikasiResource\Pages\ViewNotifikasi; // <-- SUDAH DITAMBAHKAN
-
 use App\Models\Notifikasi;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -33,7 +31,7 @@ class NotifikasiResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         $query = Notifikasi::where('is_read', false);
-        
+
         if (auth()->user()?->role === 'mahasiswa') {
             $query->where('user_id', auth()->id());
         }
@@ -102,7 +100,8 @@ class NotifikasiResource extends Resource
                     ->weight('medium')
                     ->searchable()
                     ->sortable()
-                    ->description(fn (Notifikasi $record): string => 
+                    ->description(
+                        fn(Notifikasi $record): string =>
                         \Illuminate\Support\Str::limit($record->pesan, 60)
                     ),
 
@@ -142,8 +141,8 @@ class NotifikasiResource extends Resource
                     Tables\Actions\EditAction::make()->color('warning'),
                     Tables\Actions\DeleteAction::make()->color('danger'),
                 ])->icon('heroicon-m-ellipsis-vertical')
-                  ->button()
-                  ->label('Menu')
+                    ->button()
+                    ->label('Menu')
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -205,13 +204,8 @@ class NotifikasiResource extends Resource
     // Mengunci scope query data: Mahasiswa hanya melihat pesan miliknya, Admin menguasai semua data
     public static function getEloquentQuery(): Builder
     {
-        $query = parent::getEloquentQuery();
-
-        if (auth()->user()?->role === 'mahasiswa') {
-            return $query->where('user_id', auth()->id());
-        }
-
-        return $query;
+        return parent::getEloquentQuery()
+            ->where('user_id', auth()->id());
     }
 
     public static function getPages(): array
